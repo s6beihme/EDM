@@ -5,8 +5,6 @@
 #include <algorithm>
 
 // Implementation of Kruskals Algorithm using a Matrix class and making kruskal a method
-//to fit required format I made another Kruskal function that just uses the first one, 
-// but isnt a method and has the required input
 
 //Find function to use in Union-Find-Functions 
 //using a given "parent-vector" (using call by reference)
@@ -98,8 +96,6 @@ void Graph::read_from_file(std::string filename) {
 	if(n<0) {
 		std::cout<< "number of nodes has to be >=0";
 	}
-	//std::vector<std::vector<Edge>> temp(num_nodes); //create graph according to length
-	//adj_list=temp; //set this graph to the according graph
 	
 	while(myfile.good()) { //go through whole file and add all the edges with respective weight
 	
