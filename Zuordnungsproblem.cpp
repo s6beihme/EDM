@@ -23,12 +23,11 @@ public:
 
 class Edge {
 public:
-	Edge(int _start, int _target, int _cost) : start(_start), target(_target), cost(_cost) {}
+	Edge(int _target, int _cost) : target(_target), cost(_cost) {}
 	//copy constructor
-	Edge(const Edge&other) : start(other.start), target(other.target), cost(other.cost) {}
+	Edge(const Edge&other) : target(other.target), cost(other.cost) {}
 	//copy assignment
-	Edge& operator = (const Edge& other) { start = other.start; target = other.target; cost = other.cost; return *this; }
-	int start;
+	Edge& operator = (const Edge& other) { target = other.target; cost = other.cost; return *this; }
 	int target;
 	int cost;
 };
@@ -101,15 +100,15 @@ Graph::Graph(std::string filename) {
 	int start, target, cost;
 	myfile >> node_count;
 	adj_list = std::vector<std::vector<Edge>>(node_count + 2);
-	for (int i = 0; i <= (node_count / 2)-1; i++) adj_list[node_count].push_back(Edge(node_count, i, 0));
-	for (int i = node_count / 2; i <= node_count - 1; i++) adj_list[i].push_back(Edge(i, node_count + 1, 0));
+	for (int i = 0; i <= (node_count / 2)-1; i++) adj_list[node_count].push_back(Edge(i, 0));
+	for (int i = node_count / 2; i <= node_count - 1; i++) adj_list[i].push_back(Edge(node_count + 1, 0));
 	while (myfile.good()) {
 		myfile >> start >> target >> cost;
 		if (start >= node_count / 2 || start < 0 || target<node_count / 2 || target>node_count-1) {
 			std::cout << "\nError: invalid node index in file";
 			exit(0);
 		}
-		adj_list[start].push_back(Edge(start, target, cost));
+		adj_list[start].push_back(Edge(target, cost));
 	}
 	node_count+=2;
 	potential = std::vector<int>(node_count, 0);
@@ -121,7 +120,7 @@ void Graph::print() {
 	std::cout << node_count << " Nodes\nEdges:\n";
 	for (int i = 0; i < node_count; i++) {
 		for (unsigned int j = 0; j < adj_list[i].size(); j++) {
-			std::cout << adj_list[i][j].start << " " << adj_list[i][j].target << " " << adj_list[i][j].cost << std::endl;
+			std::cout << i << " " << adj_list[i][j].target << " " << adj_list[i][j].cost << std::endl;
 		}
 	}
 	std::cout << "\nPotentials:\n";
@@ -135,7 +134,7 @@ void Graph::moore_bellman_ford(int source, std::vector<int>& predecessor, std::v
 	distance = std::vector<int>(node_count, INF);
 	predecessor[source] = source;
 	distance[source] = 0;
-	Edge e(0, 0, 0);
+	Edge e(0, 0);
 	for (int i = 0; i <= node_count - 1; i++) {
 		for (int j = 0; j < node_count; j++) {
 			for (unsigned int k = 0; k < adj_list[j].size(); k++) {
@@ -161,7 +160,7 @@ void Graph::dijkstra(int source, std::vector<int>& predecessor, std::vector<int>
 	pq.push(Node(source, 0));
 
 	int v;
-	Edge e(0,0,0);
+	Edge e(0,0);
 	while (!pq.empty()) {
 		v = pq.top().index;
 		pq.pop();
@@ -191,7 +190,7 @@ void Graph::turn_edge(int start, unsigned int position_in_adj_list) {
 	int target = adj_list[start][position_in_adj_list].target;
 	int cost = adj_list[start][position_in_adj_list].cost;
 	adj_list[start].erase(adj_list[start].begin() + position_in_adj_list);
-	adj_list[target].push_back(Edge(target, start, -cost));
+	adj_list[target].push_back(Edge(start, -cost));
 }
 
 bool Graph::successive_shortest_path() {
