@@ -242,9 +242,12 @@ void Graph::print_min_cost_perfect_matching() {
 	}
 }
 int main(int argc, char* argv[]) {
-	
+	if (argc < 2) {
+		std::cout << "This program requires the name of the file, in which the graph is stored, to be passed as the first arguemnt\n";
+		return 0;
+	}
 	Graph g(argv[1]);
 
 	g.print_min_cost_perfect_matching();
-	
+	return 0;
 }
