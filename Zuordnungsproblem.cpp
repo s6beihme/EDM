@@ -38,7 +38,7 @@ public:
 	//adds source and sink and fills adj_list accordingly 
 	//(adj_list[node_count] are the edges leaving source and adj_list[node_count+1] are the edges leaving sink.
 	//otherwise adj_list is according to index)
-	Graph(std::string filename);
+	Graph(char* filename);
 	void print();
 
 	//to be used in the first step to compute first potential (NOTE: graph is acyclic, therefore a valid potential exists)
@@ -88,7 +88,7 @@ bool Node::operator > (Node v2) {
 	else return false;
 }
 
-Graph::Graph(std::string filename) {
+Graph::Graph(char* filename) {
 	std::ifstream myfile;
 	myfile.open(filename);
 
@@ -241,9 +241,9 @@ void Graph::print_min_cost_perfect_matching() {
 		}
 	}
 }
-int main() {
+int main(int argc, char* argv[]) {
 	
-	Graph g("graphfile.txt");
+	Graph g(argv[1]);
 
 	g.print_min_cost_perfect_matching();
 	
